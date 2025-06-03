@@ -58,3 +58,10 @@ class Curve2Line:
 
         return True
             
+    def extract_polygons(self) -> list[list[tuple[int, int]]]:
+        polygons = []
+        for segment in self.line_segments:
+            points = segment['points']
+            polygons.append(points)
+
+        return polygons
