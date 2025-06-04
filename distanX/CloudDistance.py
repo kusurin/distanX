@@ -71,7 +71,7 @@ class CloudDistance:
 
         return self.distance_matrix
 
-    def compute_cloud_distance(self, on: Literal['library_1', 'library_2']):
+    def compute_cloud_distance(self, on: Literal['library_1', 'library_2'] = 'library_1'):
         if on == 'library_2':
             self.distance_matrix = self.distance_matrix.T
         
