@@ -64,7 +64,7 @@ class Line2ROI:
 
         return coords_df[coords_df['is_in_ROI']].index.tolist()
 
-    def set_adata_ROI(self, ROI_name: str) -> ad.anndata:
+    def set_adata_ROI(self, ROI_name: str) -> ad.AnnData:
         self.adata.obs[f'ROI_{ROI_name}'] = 'False'
         self.adata.obs.loc[self.extract_ROI(ROI_name), f'ROI_{ROI_name}'] = 'True'
 
