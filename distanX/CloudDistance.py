@@ -7,7 +7,7 @@ from joblib import Parallel, delayed
 import multiprocessing as mp
 
 class CloudDistance:
-    def __default_distance_function(self, x1: float, y1: float, x2: float, y2: float) -> float:
+    def _default_distance_function(self, x1: float, y1: float, x2: float, y2: float) -> float:
         return np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
     
     __CLOUD_DISTANCE_FUNCTIONS = {
@@ -17,7 +17,7 @@ class CloudDistance:
     }
 
     def __init__(self, n_jobs: int = -1):
-        self.__pp_distance_function = self.__default_distance_function
+        self.__pp_distance_function = self._default_distance_function
         self.__cloud_distance_function = np.min
         self.distance_matrix = None
         self.n_jobs = n_jobs if n_jobs != -1 else mp.cpu_count()
@@ -32,7 +32,7 @@ class CloudDistance:
             return
         self.__cloud_distance_function = cloud_distance_function
     
-    def __compute_distance_chunk(self, coord_1_chunk, coord_2_array):
+    def _compute_distance_chunk(self, coord_1_chunk, coord_2_array):
         x1, y1 = coord_1_chunk[:, 0][:, np.newaxis], coord_1_chunk[:, 1][:, np.newaxis]
         x2, y2 = coord_2_array[:, 0][np.newaxis, :], coord_2_array[:, 1][np.newaxis, :]
         
@@ -61,7 +61,7 @@ class CloudDistance:
         chunks = [coord_df_1_array[i:i+chunk_size] for i in range(0, len(coord_df_1_array), chunk_size)]
         
         distance_chunks = Parallel(n_jobs=self.n_jobs)(
-            delayed(self.__compute_distance_chunk)(chunk, coord_df_2_array) 
+            delayed(self._compute_distance_chunk)(chunk, coord_df_2_array) 
             for chunk in chunks
         )
         
