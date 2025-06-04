@@ -29,6 +29,8 @@ class Line2ROI:
         results = np.zeros(len(points), dtype=bool)
         if method == 'winding number':
             for polygon in self.polygons[ROI_name]:
+                results_single_polygon = np.zeros(len(points), dtype=bool)
+
                 polygon_array = np.array(polygon)
                 x, y = points[:, 0], points[:, 1]
 
@@ -48,7 +50,9 @@ class Line2ROI:
                     mask_may_cross_top_bottom = (y_poly_i > y) & (y >= y_poly_next_i)
                     winding_number += np.where(mask_may_cross_top_bottom & ((x_poly_next_i - x_poly_i) * (y - y_poly_i) - (x - x_poly_i) * (y_poly_next_i - y_poly_i) < 0), -1, 0)
 
-                results = np.where(winding_number % 2 == 1, True, False)
+                results_single_polygon = np.where(winding_number % 2 == 1, True, False)
+
+                results = results | results_single_polygon
 
         elif method == 'ray casting':
             pass
