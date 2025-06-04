@@ -4,7 +4,7 @@ setup(
     name='distanX',
     version='0.1.0',
     packages=find_packages(),
-    install_requires=['opencv-python', 'anndata', 'pandas', 'numpy', 'typing', 'joblib', 'multiprocessing'],
+    install_requires=['opencv-python', 'anndata', 'pandas', 'numpy', 'joblib'],
     author='kusurin',
     description='A package for distanX module',
     long_description=open('README.md').read(),
