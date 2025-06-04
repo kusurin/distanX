@@ -32,7 +32,7 @@ class CloudDistance:
             return
         self.__cloud_distance_function = cloud_distance_function
     
-    def _compute_distance_chunk(self, coord_1_chunk, coord_2_array):
+    def __compute_distance_chunk(self, coord_1_chunk, coord_2_array):
         x1, y1 = coord_1_chunk[:, 0][:, np.newaxis], coord_1_chunk[:, 1][:, np.newaxis]
         x2, y2 = coord_2_array[:, 0][np.newaxis, :], coord_2_array[:, 1][np.newaxis, :]
         
@@ -61,7 +61,7 @@ class CloudDistance:
         chunks = [coord_df_1_array[i:i+chunk_size] for i in range(0, len(coord_df_1_array), chunk_size)]
         
         distance_chunks = Parallel(n_jobs=self.n_jobs)(
-            delayed(self._compute_distance_chunk)(chunk, coord_df_2_array) 
+            delayed(self.__compute_distance_chunk)(chunk, coord_df_2_array) 
             for chunk in chunks
         )
         
