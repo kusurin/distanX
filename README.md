@@ -2,7 +2,7 @@
 `distanX`是一个用于从手绘区域中提取ROI，并计算空间转录组数据中细胞群体或ROI间距离的python包。
 
 <details>
-<summary>English</summary>
+<summary style="cursor: pointer;color: red">English 🌏</summary>
 
 `distanX` is a Python package for extracting ROIs from hand-drawn regions and calculating distances between cell populations or ROIs in spatial transcriptomics data.
 
