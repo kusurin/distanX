@@ -7,17 +7,17 @@ from joblib import Parallel, delayed
 import multiprocessing as mp
 
 class CloudDistance:
-    def default_distance_function(self, x1: float, y1: float, x2: float, y2: float) -> float:
+    def __default_distance_function(self, x1: float, y1: float, x2: float, y2: float) -> float:
         return np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
     
-    CLOUD_DISTANCE_FUNCTIONS = {
+    __CLOUD_DISTANCE_FUNCTIONS = {
         'min': np.min,
         'mean': np.mean,
         'max': np.max,
     }
 
     def __init__(self, n_jobs: int = -1):
-        self.__pp_distance_function = self.default_distance_function
+        self.__pp_distance_function = self.__default_distance_function
         self.__cloud_distance_function = np.min
         self.distance_matrix = None
         self.n_jobs = n_jobs if n_jobs != -1 else mp.cpu_count()
@@ -27,8 +27,8 @@ class CloudDistance:
         self.__pp_distance_function = pp_distance_function
 
     def set_cloud_distance_function(self, cloud_distance_function: Union[Literal['min', 'mean', 'max'], Callable]):
-        if cloud_distance_function in self.CLOUD_DISTANCE_FUNCTIONS:
-            self.__cloud_distance_function = self.CLOUD_DISTANCE_FUNCTIONS[cloud_distance_function]
+        if cloud_distance_function in self.__CLOUD_DISTANCE_FUNCTIONS:
+            self.__cloud_distance_function = self.__CLOUD_DISTANCE_FUNCTIONS[cloud_distance_function]
             return
         self.__cloud_distance_function = cloud_distance_function
     
