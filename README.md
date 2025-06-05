@@ -45,7 +45,7 @@ l2r_obj.append_polygons(c2l_obj.extract_polygons(),'con')
 
 l2r_obj.set_adata_ROI('con')
 
-sq.pl.spatial_scatter(adata, color=['isROI'])
+sq.pl.spatial_scatter(adata, color=['ROI_con'])
 
 cd_obj=CloudDistance(n_jobs=10)
 cd_obj.compute_distance_matrix(adata,library_key_1='ROI_con',library_key_2='ROI_con',library_name_2='False')
@@ -199,7 +199,7 @@ l2r_obj.append_polygons(c2l_obj.extract_polygons(),'con')
 
 l2r_obj.set_adata_ROI('con')
 
-sq.pl.spatial_scatter(adata, color=['isROI'])
+sq.pl.spatial_scatter(adata, color=['ROI_con'])
 
 cd_obj=CloudDistance(n_jobs=10)
 cd_obj.compute_distance_matrix(adata,library_key_1='ROI_con',library_key_2='ROI_con',library_name_2='False')
