@@ -39,19 +39,19 @@ class CloudDistance:
         vectorized_pp_distance_function = np.vectorize(self.__pp_distance_function)
         return vectorized_pp_distance_function(x1, y1, x2, y2)
 
-    def compute_distance_matrix(self, adata: ad.AnnData, library_key_1: str | None = None, library_name_1: str | None = None, library_key_2: str | None = None, library_name_2: str | None = None) -> pd.DataFrame:
-        if library_name_1 is None:
-            library_name_1 = 'True'
-        if library_name_2 is None:
-            library_name_2 = 'True'
+    def compute_distance_matrix(self, adata: ad.AnnData, class_key_1: str | None = None, class_name_1: str | None = None, class_key_2: str | None = None, class_name_2: str | None = None) -> pd.DataFrame:
+        if class_name_1 is None:
+            class_name_1 = 'True'
+        if class_name_2 is None:
+            class_name_2 = 'True'
 
         coord_df = pd.DataFrame(index=adata.obs_names, columns=['x', 'y'])
 
         coord_df['x'] = adata.obsm['spatial'][:, 0]
         coord_df['y'] = adata.obsm['spatial'][:, 1]
 
-        coord_df_1 = coord_df[adata.obs[library_key_1] == library_name_1]
-        coord_df_2 = coord_df[adata.obs[library_key_2] == library_name_2]
+        coord_df_1 = coord_df[adata.obs[class_key_1] == class_name_1]
+        coord_df_2 = coord_df[adata.obs[class_key_2] == class_name_2]
 
         coord_df_1_array = np.array(coord_df_1[['x', 'y']])
         coord_df_2_array = np.array(coord_df_2[['x', 'y']])
@@ -71,8 +71,8 @@ class CloudDistance:
 
         return self.distance_matrix
 
-    def compute_cloud_distance(self, on: Literal['library_1', 'library_2'] = 'library_1'):
-        if on == 'library_2':
+    def compute_cloud_distance(self, on: Literal['class_1', 'class_2'] = 'class_1'):
+        if on == 'class_2':
             self.distance_matrix = self.distance_matrix.T
         
         vectorized_cloud_distance_function = np.vectorize(self.__cloud_distance_function, signature='(n)->()')
@@ -80,10 +80,10 @@ class CloudDistance:
 
         return cloud_distances
 
-    def extract_points(self, adata: ad.AnnData, library_key: str, library_name: str) -> pd.DataFrame:
+    def extract_points(self, adata: ad.AnnData, class_key: str, class_name: str) -> pd.DataFrame:
         coord_df = pd.DataFrame(index=adata.obs_names, columns=['x', 'y'])
 
         coord_df['x'] = adata.obsm['spatial'][:, 0]
         coord_df['y'] = adata.obsm['spatial'][:, 1]
 
-        return coord_df[adata.obs[library_key] == library_name]
+        return coord_df[adata.obs[class_key] == class_name]
