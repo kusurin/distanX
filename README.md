@@ -25,33 +25,7 @@
     - `compute_cloud_distance` to calculate the point cloud distance, return the distance from each point to another point cloud, and further calculate the distance between two point clouds
 
 ## Demo
-```python
-from distanX import Curve2Line, Line2ROI
-import scanpy as sc
-import squidpy as sq
-
-adata = sc.read_h5ad('./data/adata.h5ad')
-
-c2l_obj = Curve2Line()
-
-c2l_obj.load_and_preprocess('./data/tissue_hires_image_mask.png')
-c2l_obj.detect_contours()
-c2l_obj.approximate_contours(epsilon_factor=0.005)
-
-l2r_obj = Line2ROI()
-l2r_obj.load_adata(adata)
-l2r_obj.set_scalefactor('./data/tissue_hires_image_mask.png')
-l2r_obj.append_polygons(c2l_obj.extract_polygons(),'con')
-
-l2r_obj.set_adata_ROI('con')
-
-sq.pl.spatial_scatter(adata, color=['ROI_con'])
-
-cd_obj=CloudDistance(n_jobs=10)
-cd_obj.compute_distance_matrix(adata,class_key_1='ROI_con',class_key_2='ROI_con',class_name_2='False')
-cd_obj.set_cloud_distance_function('mean')
-distances = cd_obj.compute_cloud_distance(on='class_1')
-```
+See notebook on [github](https://github.com/kusurin/distanX/blob/main/demo/distanX_demo.ipynb) or [nbviewer](https://nbviewer.org/github/kusurin/distanX/blob/main/demo/distanX_demo.ipynb)
 
 ## API reference
 ### `Curve2Line`
@@ -179,33 +153,7 @@ Returns: `pd.DataFrame`, points and coordinates of specified category, row index
     - `compute_cloud_distance`计算点云距离，返回每点到另一个点云的距离（默认从第一类中的点到第二类中的点云），可以进一步计算两点云距离
 
 ## 示例
-```python
-from distanX import Curve2Line, Line2ROI
-import scanpy as sc
-import squidpy as sq
-
-adata = sc.read_h5ad('./data/adata.h5ad')
-
-c2l_obj = Curve2Line()
-
-c2l_obj.load_and_preprocess('./data/tissue_hires_image_mask.png')
-c2l_obj.detect_contours()
-c2l_obj.approximate_contours(epsilon_factor=0.005)
-
-l2r_obj = Line2ROI()
-l2r_obj.load_adata(adata)
-l2r_obj.set_scalefactor('./data/tissue_hires_image_mask.png')
-l2r_obj.append_polygons(c2l_obj.extract_polygons(),'con')
-
-l2r_obj.set_adata_ROI('con')
-
-sq.pl.spatial_scatter(adata, color=['ROI_con'])
-
-cd_obj=CloudDistance(n_jobs=10)
-cd_obj.compute_distance_matrix(adata,class_key_1='ROI_con',class_key_2='ROI_con',class_name_2='False')
-cd_obj.set_cloud_distance_function('mean')
-distances = cd_obj.compute_cloud_distance(on='class_1')
-```
+在[github](https://github.com/kusurin/distanX/blob/main/demo/distanX_demo.ipynb)或[nbviewer](https://nbviewer.org/github/kusurin/distanX/blob/main/demo/distanX_demo.ipynb) 中查看notebook。
 
 ## API参考
 ### Curve2Line
