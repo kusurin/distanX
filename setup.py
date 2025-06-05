@@ -2,11 +2,11 @@ from setuptools import setup, find_packages
 
 setup(
     name='distanX',
-    version='0.1.0',
+    version='0.1.1',
     packages=find_packages(),
     install_requires=['opencv-python', 'anndata', 'pandas', 'numpy', 'joblib'],
     author='kusurin',
-    description='A package for distanX module',
+    description='A Python Package for Getting ROIs and Calculating Group Distances in Spatial Transcriptomics Data',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/kusurin/distanX',
