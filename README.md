@@ -7,6 +7,11 @@
 
 `distanX` is a Python package for extracting ROIs from hand-drawn regions and calculating distances between cell populations or ROIs in spatial transcriptomics data.
 
+## Installation
+```bash
+pip install distanX
+```
+
 ## Usage
 
 1. Prepare an image that uses colors to distinguish ROIs from the remaining areas. For example, you can create a new layer on a hires image, then draw closed solid areas with white background and black fill, and export only that layer.
@@ -134,6 +139,11 @@ Extract points and coordinates of specified category.
 
 Returns: `pd.DataFrame`, points and coordinates of specified category, row index is `adata.obs_names`, column index is `x`, `y`
 </details>
+
+## 安装
+```bash
+pip install distanX
+```
 
 ## 用法
 
