@@ -48,9 +48,9 @@ l2r_obj.set_adata_ROI('con')
 sq.pl.spatial_scatter(adata, color=['ROI_con'])
 
 cd_obj=CloudDistance(n_jobs=10)
-cd_obj.compute_distance_matrix(adata,library_key_1='ROI_con',library_key_2='ROI_con',library_name_2='False')
+cd_obj.compute_distance_matrix(adata,class_key_1='ROI_con',class_key_2='ROI_con',class_name_2='False')
 cd_obj.set_cloud_distance_function('mean')
-distances = cd_obj.compute_cloud_distance(on='library_1')
+distances = cd_obj.compute_cloud_distance(on='class_1')
 ```
 
 ## API reference
@@ -132,30 +132,30 @@ Set the point cloud distance calculation method, default is `min`.
 
 - `cloud_distance_function`: Function to calculate distance from a point in one class to another point cloud, options are `min`(`np.min`), `mean`(`np.mean`), `max`(`np.max`) or custom function, this function should operate on a one-dimensional array
 
-#### `compute_distance_matrix(self, adata: ad.AnnData, library_key_1: str | None = None, library_name_1: str | None = None, library_key_2: str | None = None, library_name_2: str | None = None) -> pd.DataFrame`
+#### `compute_distance_matrix(self, adata: ad.AnnData, class_key_1: str | None = None, class_name_1: str | None = None, class_key_2: str | None = None, class_name_2: str | None = None) -> pd.DataFrame`
 Calculate distance matrix between two point clouds.
 
 - `adata`: Spatial transcriptomics data
-- `library_key_1`: First class
-- `library_name_1`: First class name
-- `library_key_2`: Second class
-- `library_name_2`: Second class name
+- `class_key_1`: First class
+- `class_name_1`: First class name
+- `class_key_2`: Second class
+- `class_name_2`: Second class name
 
 Returns: `pd.DataFrame`, distance matrix between two point clouds, row index is the first class, column index is the second class, values are distances between two points
 
-#### `compute_cloud_distance(self, on: Literal['library_1', 'library_2'] = 'library_1')`
+#### `compute_cloud_distance(self, on: Literal['class_1', 'class_2'] = 'class_1')`
 Calculate point cloud distance.
 
 - `on`: Set to calculate distance from individual points in which class to all points in another class, default is the first class
 
 Returns: Generally `numpy.ndarray`, custom distance from each point in the class specified by `on` to all points in another class
 
-#### `extract_points(self, adata: ad.AnnData, library_key: str, library_name: str) -> pd.DataFrame`
+#### `extract_points(self, adata: ad.AnnData, class_key: str, class_name: str) -> pd.DataFrame`
 Extract points and coordinates of specified category.
 
 - `adata`: Spatial transcriptomics data
-- `library_key`: Specified category
-- `library_name`: Classification name within specified category
+- `class_key`: Specified category
+- `class_name`: Classification name within specified category
 
 Returns: `pd.DataFrame`, points and coordinates of specified category, row index is `adata.obs_names`, column index is `x`, `y`
 </details>
@@ -202,9 +202,9 @@ l2r_obj.set_adata_ROI('con')
 sq.pl.spatial_scatter(adata, color=['ROI_con'])
 
 cd_obj=CloudDistance(n_jobs=10)
-cd_obj.compute_distance_matrix(adata,library_key_1='ROI_con',library_key_2='ROI_con',library_name_2='False')
+cd_obj.compute_distance_matrix(adata,class_key_1='ROI_con',class_key_2='ROI_con',class_name_2='False')
 cd_obj.set_cloud_distance_function('mean')
-distances = cd_obj.compute_cloud_distance(on='library_1')
+distances = cd_obj.compute_cloud_distance(on='class_1')
 ```
 
 ## API参考
@@ -287,29 +287,29 @@ distances = cd_obj.compute_cloud_distance(on='library_1')
 
 - `cloud_distance_function`: 计算类中一点到另一点云距离的函数，可选`min`(`np.min`)、`mean`(`np.mean`)、`max`(`np.max`)或自定义函数，该函数应当对一个一维数组进行操作
 
-#### `compute_distance_matrix(self, adata: ad.AnnData, library_key_1: str | None = None, library_name_1: str | None = None, library_key_2: str | None = None, library_name_2: str | None = None) -> pd.DataFrame`
+#### `compute_distance_matrix(self, adata: ad.AnnData, class_key_1: str | None = None, class_name_1: str | None = None, class_key_2: str | None = None, class_name_2: str | None = None) -> pd.DataFrame`
 计算两点云距离矩阵。
 
 - `adata`: 空转数据
-- `library_key_1`: 第一类
-- `library_name_1`: 第一类名称
-- `library_key_2`: 第二类
-- `library_name_2`: 第二类名称
+- `class_key_1`: 第一类
+- `class_name_1`: 第一类名称
+- `class_key_2`: 第二类
+- `class_name_2`: 第二类名称
 
 返回值：`pd.DataFrame`，两点云距离矩阵，行索引为第一类，列索引为第二类，值为两点距离
 
-#### `compute_cloud_distance(self, on: Literal['library_1', 'library_2'] = 'library_1')`
+#### `compute_cloud_distance(self, on: Literal['class_1', 'class_2'] = 'class_1')`
 计算点云距离。
 
 - `on`: 设置计算从哪类的单个点到另一类所有点的距离，默认是第一类
 
 返回值：一般是`numpy.ndarray`，是`on`指定类别中的各个点到另一类所有点的自定义距离
 
-#### `extract_points(self, adata: ad.AnnData, library_key: str, library_name: str) -> pd.DataFrame`
+#### `extract_points(self, adata: ad.AnnData, class_key: str, class_name: str) -> pd.DataFrame`
 提取指定类别的点及坐标。
 
 - `adata`: 空转数据
-- `library_key`: 指定类别
-- `library_name`: 指定类别中的分类名称
+- `class_key`: 指定类别
+- `class_name`: 指定类别中的分类名称
 
 返回值：`pd.DataFrame`，指定类别的点及坐标，行索引为`adata.obs_names`，列索引为`x`、`y`
