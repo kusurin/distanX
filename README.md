@@ -313,3 +313,15 @@ distances = cd_obj.compute_cloud_distance(on='class_1')
 - `class_name`: 指定类别中的分类名称
 
 返回值：`pd.DataFrame`，指定类别的点及坐标，行索引为`adata.obs_names`，列索引为`x`、`y`
+
+## 引用distanX
+如果你觉得`distanX`对你的工作有帮助，欢迎引用它：
+
+```bibtex
+@misc{distanX,
+  author = {kusurin},
+  title = {distanX: A Python Package for Getting ROIs and Calculating Group Distances in Spatial Transcriptomics Data},
+  howpublished = {Github},
+  year = {2025},
+  url = {https://github.com/kusurin/distanX}
+}
