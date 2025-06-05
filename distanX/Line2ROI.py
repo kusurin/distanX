@@ -3,6 +3,8 @@ import cv2
 import pandas as pd
 import numpy as np
 
+from typing import Optional
+
 class Line2ROI:
     def __init__(self):
         self.adata = None
@@ -12,7 +14,7 @@ class Line2ROI:
     def load_adata(self, adata: ad.AnnData):
         self.adata = adata
 
-    def set_scalefactor(self, image_path: str, library_id: str | None = None, reference_image_key: str = 'hires', override_scalefactor: float | None = None):
+    def set_scalefactor(self, image_path: str, library_id: Optional[str] = None, reference_image_key: str = 'hires', override_scalefactor: Optional[float] = None):
         if override_scalefactor is not None:
             self.scalefactor = override_scalefactor
         else:

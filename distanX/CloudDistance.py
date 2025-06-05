@@ -1,7 +1,7 @@
 import anndata as ad
 import pandas as pd
 import numpy as np
-from typing import Callable, Literal, Union
+from typing import Callable, Literal, Union, Optional
 
 from joblib import Parallel, delayed
 import multiprocessing as mp
@@ -39,7 +39,7 @@ class CloudDistance:
         vectorized_pp_distance_function = np.vectorize(self.__pp_distance_function)
         return vectorized_pp_distance_function(x1, y1, x2, y2)
 
-    def compute_distance_matrix(self, adata: ad.AnnData, class_key_1: str | None = None, class_name_1: str | None = None, class_key_2: str | None = None, class_name_2: str | None = None) -> pd.DataFrame:
+    def compute_distance_matrix(self, adata: ad.AnnData, class_key_1: Optional[str] = None, class_name_1: Optional[str] = None, class_key_2: Optional[str] = None, class_name_2: Optional[str] = None) -> pd.DataFrame:
         if class_name_1 is None:
             class_name_1 = 'True'
         if class_name_2 is None:
