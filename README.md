@@ -288,7 +288,7 @@ pip install distanX
 
 ```bibtex
 @misc{distanX,
-  author = {kusurin},
+  author = {Luna Lee},
   title = {distanX: A Python Package for Getting ROIs and Calculating Group Distances in Spatial Transcriptomics Data},
   howpublished = {Github},
   year = {2025},
