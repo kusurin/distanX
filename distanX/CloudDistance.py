@@ -21,6 +21,8 @@ class CloudDistance:
         self.__cloud_distance_function = np.min
         self.distance_matrix = None
         self.n_jobs = n_jobs if n_jobs != -1 else mp.cpu_count()
+        self.coords_df_1 = None
+        self.coords_df_2 = None
         
 
     def set_pp_distance_function(self, pp_distance_function: Callable[[float, float, float, float], float]):
@@ -39,22 +41,25 @@ class CloudDistance:
         vectorized_pp_distance_function = np.vectorize(self.__pp_distance_function)
         return vectorized_pp_distance_function(x1, y1, x2, y2)
 
-    def compute_distance_matrix(self, adata: ad.AnnData, class_key_1: Optional[str] = None, class_name_1: Optional[str] = None, class_key_2: Optional[str] = None, class_name_2: Optional[str] = None) -> pd.DataFrame:
+    def compute_distance_matrix(self, adata: ad.AnnData, class_key_1: Optional[str] = None, class_name_1: Union[str, Literal['class_1'], None] = None, class_key_2: Optional[str] = None, class_name_2: Union[str, Literal['class_2'], None] = None) -> pd.DataFrame:
         if class_name_1 is None:
             class_name_1 = 'True'
         if class_name_2 is None:
             class_name_2 = 'True'
 
-        coord_df = pd.DataFrame(index=adata.obs_names, columns=['x', 'y'])
+        if class_name_1 != 'class_1' or class_name_2 != 'class_2':
+            coord_df = pd.DataFrame(index=adata.obs_names, columns=['x', 'y'])
 
-        coord_df['x'] = adata.obsm['spatial'][:, 0]
-        coord_df['y'] = adata.obsm['spatial'][:, 1]
+            coord_df['x'] = adata.obsm['spatial'][:, 0]
+            coord_df['y'] = adata.obsm['spatial'][:, 1]
 
-        coord_df_1 = coord_df[adata.obs[class_key_1] == class_name_1]
-        coord_df_2 = coord_df[adata.obs[class_key_2] == class_name_2]
+            if class_name_1 != 'class_1':
+                self.coords_df_1 = coord_df[adata.obs[class_key_1] == class_name_1]
+            if class_name_2 != 'class_2':
+                self.coords_df_2 = coord_df[adata.obs[class_key_2] == class_name_2]
 
-        coord_df_1_array = np.array(coord_df_1[['x', 'y']])
-        coord_df_2_array = np.array(coord_df_2[['x', 'y']])
+        coord_df_1_array = np.array(self.coords_df_1[['x', 'y']])
+        coord_df_2_array = np.array(self.coords_df_2[['x', 'y']])
 
         # 多核计算
         chunk_size = max(1, len(coord_df_1_array) // self.n_jobs)
@@ -67,7 +72,7 @@ class CloudDistance:
         
         distance_matrix = np.vstack(distance_chunks)
 
-        self.distance_matrix = pd.DataFrame(distance_matrix, index=coord_df_1.index, columns=coord_df_2.index)
+        self.distance_matrix = pd.DataFrame(distance_matrix, index=self.coords_df_1.index, columns=self.coords_df_2.index)
 
         return self.distance_matrix
 
@@ -87,3 +92,28 @@ class CloudDistance:
         coord_df['y'] = adata.obsm['spatial'][:, 1]
 
         return coord_df[adata.obs[class_key] == class_name]
+    
+    def set_artificial_ROI(self, polygons: list[list[tuple[int, int]]], img_width: int, img_height: int, class_name: Literal['class_1', 'class_2'] = 'class_2', scale_factor: float = 1.0, density: int = 1000):
+        slice_width = img_width / scale_factor
+        slice_height = img_height / scale_factor
+        
+        from .Line2ROI import Line2ROI
+
+        x_coords = np.linspace(0, slice_width, density)
+        y_coords = np.linspace(0, slice_height, density)
+        x_grid, y_grid = np.meshgrid(x_coords, y_coords)
+
+        x_flat = x_grid.flatten()
+        y_flat = y_grid.flatten()
+
+        artificial_slice = pd.DataFrame({'x': x_flat, 'y': y_flat}, index=[f'artificial_{i}' for i in range(len(x_flat))])
+
+        l2r = Line2ROI()
+        l2r.set_scalefactor(override_scalefactor=scale_factor)
+        l2r.append_polygons(polygons, 'artificial')
+        artificial_slice['is_in_ROI'] = l2r._is_in_ROI(artificial_slice.to_numpy(), 'artificial')
+
+        if class_name == 'class_2':
+            self.coords_df_2 = artificial_slice[artificial_slice['is_in_ROI']].drop(columns=['is_in_ROI'])
+        else:
+            self.coords_df_1 = artificial_slice[artificial_slice['is_in_ROI']].drop(columns=['is_in_ROI'])

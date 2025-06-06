@@ -27,7 +27,7 @@ class Line2ROI:
         polygons = [[tuple(coord / self.scalefactor for coord in point) for point in polygon] for polygon in polygons]
         self.polygons[ROI_name] = polygons
 
-    def __is_in_ROI(self, points: np.ndarray, ROI_name: str, method: Literal['winding number', 'ray casting'] = 'winding number') -> bool:
+    def _is_in_ROI(self, points: np.ndarray, ROI_name: str, method: Literal['winding number', 'ray casting'] = 'winding number') -> bool:
         results = np.zeros(len(points), dtype=bool)
         if method == 'winding number':
             for polygon in self.polygons[ROI_name]:
@@ -66,7 +66,7 @@ class Line2ROI:
         coords_df['x'] = [coord[0] for coord in self.adata.obsm['spatial']]
         coords_df['y'] = [coord[1] for coord in self.adata.obsm['spatial']]
 
-        coords_df['is_in_ROI'] = self.__is_in_ROI(coords_df.to_numpy(), ROI_name, method)
+        coords_df['is_in_ROI'] = self._is_in_ROI(coords_df.to_numpy(), ROI_name, method)
 
         return coords_df[coords_df['is_in_ROI']].index.tolist()
 

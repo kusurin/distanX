@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='distanX',
-    version='0.1.2',
+    version='0.2.0',
     packages=find_packages(),
     install_requires=['opencv-python', 'anndata', 'pandas', 'numpy', 'joblib'],
     author='kusurin',
