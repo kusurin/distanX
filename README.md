@@ -31,6 +31,7 @@ pip install distanX
     - `append_polygons` to add polygon sets
     - `extract_ROI` to extract obs_names within ROIs
 4. Use the `CloudDistance` class:
+    - (Optional) `set_artificial_ROI` to generate artificial ROIs in blank areas without spots
     - `set_pp_distance_function` to set the distance calculation method (default Euclidean distance)
     - `set_cloud_distance_function` to set the point cloud distance calculation method (the `min`、`mean`、`max` of the distance from one point to another point cloud, or a custom function, default `min`)
     - `compute_cloud_distance` to calculate the point cloud distance, return the distance from each point to another point cloud, and further calculate the distance between two point clouds
@@ -77,7 +78,7 @@ Load spatial transcriptomics data.
 
 - `adata`: Spatial transcriptomics data
 
-#### `set_scalefactor(self, image_path: str, library_id: str | None = None, reference_image_key: str = 'hires', override_scalefactor: float | None = None)`
+#### `set_scalefactor(self, image_path: Optional[str] = None, library_id: str | None = None, reference_image_key: str = 'hires', override_scalefactor: float | None = None)`
 Set the scale factor between hand-drawn images and `adata.obsm['spatial']`.
 
 - `image_path`: Hand-drawn image path
@@ -143,6 +144,17 @@ Extract points and coordinates of specified category.
 - `class_name`: Classification name within specified category
 
 Returns: `pd.DataFrame`, points and coordinates of specified category, row index is `adata.obs_names`, column index is `x`, `y`
+
+#### `set_artificial_ROI(self, polygons: list[list[tuple[int, int]]], img_width: int, img_height: int, class_name: Literal['class_1', 'class_2'] = 'class_2', scale_factor: float = 1.0, density: int = 1000)`
+Generate artificial ROIs in blank areas without spots.
+
+- `polygons`: Hand-drawn region sets returned by `Curve2Line().extract_polygons()`
+- `img_width`: Hand-drawn image width
+- `img_height`: Hand-drawn image height
+- `class_name`: Set the category to store in the instance, default is `class_2`
+- `scale_factor`: Scale factor, can be obtained from `Line2ROI().scalefactor`
+- `density`: Density of artificial spots, default is 1000, uniformly distributed on one axis
+
 </details>
 
 ## 亮点
@@ -169,6 +181,7 @@ pip install distanX
     - `append_polygons`添加多边形集
     - `extract_ROI`提取ROI中的obs_names
 4. 使用`CloudDistance`类
+    - （可选）`set_artificial_ROI`在无spot的空白区域生成人工ROI
     - `set_pp_distance_function`设置两点间距离计算方法（默认欧几里得距离）
     - `set_cloud_distance_function`设置点云距离计算方法（类中一点到另一点云距离的`min`、`mean`、`max`或自定义函数，默认`min`）
     - `compute_cloud_distance`计算点云距离，返回每点到另一个点云的距离（默认从第一类中的点到第二类中的点云），可以进一步计算两点云距离
@@ -216,7 +229,7 @@ pip install distanX
 
 - `adata`: 空转数据
 
-#### `set_scalefactor(self, image_path: str, library_id: str | None = None, reference_image_key: str = 'hires', override_scalefactor: float | None = None)`
+#### `set_scalefactor(self, image_path: Optional[str] = None, library_id: str | None = None, reference_image_key: str = 'hires', override_scalefactor: float | None = None)`
 设置手绘图像与`adata.obsm['spatial']`的缩放因子。
 
 - `image_path`: 手绘图像路径
@@ -282,6 +295,16 @@ pip install distanX
 - `class_name`: 指定类别中的分类名称
 
 返回值：`pd.DataFrame`，指定类别的点及坐标，行索引为`adata.obs_names`，列索引为`x`、`y`
+
+#### `set_artificial_ROI(self, polygons: list[list[tuple[int, int]]], img_width: int, img_height: int, class_name: Literal['class_1', 'class_2'] = 'class_2', scale_factor: float = 1.0, density: int = 1000)`
+可以在无spot的空白区域生成人工ROI。
+
+- `polygons`: `Curve2Line().extract_polygons()`返回的手绘区域集合
+- `img_width`: 手绘图像宽度
+- `img_height`: 手绘图像高度
+- `class_name`: 设置储存在实例内的哪个类别，默认是`class_2`第二类
+- `scale_factor`: 缩放因子，可以从`Line2ROI().scalefactor`中获取
+- `density`: 人工spot的1维点密度，默认是1000个，均匀分布在一个轴上
 
 ## 引用distanX
 如果你觉得`distanX`对你的工作有帮助，欢迎引用它：
