@@ -14,7 +14,7 @@ class Line2ROI:
     def load_adata(self, adata: ad.AnnData):
         self.adata = adata
 
-    def set_scalefactor(self, image_path: str, library_id: Optional[str] = None, reference_image_key: str = 'hires', override_scalefactor: Optional[float] = None):
+    def set_scalefactor(self, image_path: Optional[str] = None, library_id: Optional[str] = None, reference_image_key: str = 'hires', override_scalefactor: Optional[float] = None):
         if override_scalefactor is not None:
             self.scalefactor = override_scalefactor
         else:
