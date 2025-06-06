@@ -3,7 +3,7 @@ import cv2
 import pandas as pd
 import numpy as np
 
-from typing import Optional
+from typing import Optional, Literal
 
 class Line2ROI:
     def __init__(self):
@@ -27,7 +27,7 @@ class Line2ROI:
         polygons = [[tuple(coord / self.scalefactor for coord in point) for point in polygon] for polygon in polygons]
         self.polygons[ROI_name] = polygons
 
-    def __is_in_ROI(self, points: np.ndarray, ROI_name: str, method: str) -> bool:
+    def __is_in_ROI(self, points: np.ndarray, ROI_name: str, method: Literal['winding number', 'ray casting'] = 'winding number') -> bool:
         results = np.zeros(len(points), dtype=bool)
         if method == 'winding number':
             for polygon in self.polygons[ROI_name]:
@@ -61,7 +61,7 @@ class Line2ROI:
         
         return results
             
-    def extract_ROI(self, ROI_name: str, method: str = 'winding number') -> list[str]:
+    def extract_ROI(self, ROI_name: str, method: Literal['winding number', 'ray casting'] = 'winding number') -> list[str]:
         coords_df = pd.DataFrame(index=self.adata.obs_names, columns=['x', 'y'])
         coords_df['x'] = [coord[0] for coord in self.adata.obsm['spatial']]
         coords_df['y'] = [coord[1] for coord in self.adata.obsm['spatial']]
