@@ -48,10 +48,7 @@ class CloudDistance:
             class_name_2 = 'True'
 
         if class_name_1 != 'class_1' or class_name_2 != 'class_2':
-            coord_df = pd.DataFrame(index=adata.obs_names, columns=['x', 'y'])
-
-            coord_df['x'] = adata.obsm['spatial'][:, 0]
-            coord_df['y'] = adata.obsm['spatial'][:, 1]
+            coord_df = pd.DataFrame(adata.obsm['spatial'][:,:2],index=adata.obs_names, columns=['x', 'y'])
 
             if class_name_1 != 'class_1':
                 self.coords_df_1 = coord_df[adata.obs[class_key_1] == class_name_1]
@@ -86,10 +83,7 @@ class CloudDistance:
         return cloud_distances
 
     def extract_points(self, adata: ad.AnnData, class_key: str, class_name: str) -> pd.DataFrame:
-        coord_df = pd.DataFrame(index=adata.obs_names, columns=['x', 'y'])
-
-        coord_df['x'] = adata.obsm['spatial'][:, 0]
-        coord_df['y'] = adata.obsm['spatial'][:, 1]
+        coord_df = pd.DataFrame(adata.obsm['spatial'][:,:2],index=adata.obs_names, columns=['x', 'y'])
 
         return coord_df[adata.obs[class_key] == class_name]
     

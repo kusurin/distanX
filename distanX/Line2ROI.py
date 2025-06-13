@@ -62,9 +62,7 @@ class Line2ROI:
         return results
             
     def extract_ROI(self, ROI_name: str, method: Literal['winding number', 'ray casting'] = 'winding number') -> list[str]:
-        coords_df = pd.DataFrame(index=self.adata.obs_names, columns=['x', 'y'])
-        coords_df['x'] = [coord[0] for coord in self.adata.obsm['spatial']]
-        coords_df['y'] = [coord[1] for coord in self.adata.obsm['spatial']]
+        coords_df = pd.DataFrame(self.adata.obsm['spatial'][:,:2], index=self.adata.obs_names, columns=['x', 'y'])
 
         coords_df['is_in_ROI'] = self._is_in_ROI(coords_df.to_numpy(), ROI_name, method)
 
