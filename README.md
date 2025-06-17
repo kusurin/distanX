@@ -129,8 +129,15 @@ Calculate distance matrix between two point clouds.
 
 Returns: `pd.DataFrame`, distance matrix between two point clouds, row index is the first class, column index is the second class, values are distances between two points
 
+#### `set_microns_per_pixel(self, adata: ad.AnnData, library_id: Optional[str] = None, override_mpp: Optional[float] = None)`
+Set the actual size of each pixel.
+
+- `adata`: Spatial transcriptomics data
+- `library_id`: library_id in spatial transcriptomics data, defaults to the first one
+- `override_mpp`: Directly override mpp
+
 #### `compute_cloud_distance(self, on: Literal['class_1', 'class_2'] = 'class_1')`
-Calculate point cloud distance.
+Calculate point cloud distance (microns).
 
 - `on`: Set to calculate distance from individual points in which class to all points in another class, default is the first class
 
@@ -280,8 +287,15 @@ pip install distanX
 
 返回值：`pd.DataFrame`，两点云距离矩阵，行索引为第一类，列索引为第二类，值为两点距离
 
+#### `set_microns_per_pixel(self, adata: ad.AnnData, library_id: Optional[str] = None, override_mpp: Optional[float] = None)`
+设置每像素的实际大小
+
+- `adata`: 空转数据
+- `library_id`: 空转数据中的library_id，默认使用第一个
+- `override_mpp`: 直接覆写mpp
+
 #### `compute_cloud_distance(self, on: Literal['class_1', 'class_2'] = 'class_1')`
-计算点云距离。
+计算点云距离（微米）。
 
 - `on`: 设置计算从哪类的单个点到另一类所有点的距离，默认是第一类
 
