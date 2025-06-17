@@ -23,6 +23,7 @@ class CloudDistance:
         self.n_jobs = n_jobs if n_jobs != -1 else mp.cpu_count()
         self.coords_df_1 = None
         self.coords_df_2 = None
+        self.mpp = 1.0
         
 
     def set_pp_distance_function(self, pp_distance_function: Callable[[float, float, float, float], float]):
@@ -73,12 +74,22 @@ class CloudDistance:
 
         return self.distance_matrix
 
+    def set_microns_per_pixel(self, adata: ad.AnnData, library_id: Optional[str] = None, override_mpp: Optional[float] = None):
+        if override_mpp is not None:
+            self.mpp = override_mpp
+        else:
+            if library_id is None:
+                library_id = list(self.adata.uns['spatial'].keys())[0]
+            self.mpp = adata.uns['spatial'][library_id]['scalefactors']['microns_per_pixel']
+
     def compute_cloud_distance(self, on: Literal['class_1', 'class_2'] = 'class_1'):
         if on == 'class_2':
             self.distance_matrix = self.distance_matrix.T
         
         vectorized_cloud_distance_function = np.vectorize(self.__cloud_distance_function, signature='(n)->()')
         cloud_distances = vectorized_cloud_distance_function(self.distance_matrix.values)
+
+        cloud_distances = cloud_distances * self.mpp
 
         return cloud_distances
 
