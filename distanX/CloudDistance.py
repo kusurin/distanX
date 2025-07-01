@@ -79,7 +79,7 @@ class CloudDistance:
             self.mpp = override_mpp
         else:
             if library_id is None:
-                library_id = list(self.adata.uns['spatial'].keys())[0]
+                library_id = list(adata.uns['spatial'].keys())[0]
             self.mpp = adata.uns['spatial'][library_id]['scalefactors']['microns_per_pixel']
 
     def compute_cloud_distance(self, on: Literal['class_1', 'class_2'] = 'class_1'):
