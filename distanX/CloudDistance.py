@@ -72,6 +72,8 @@ class CloudDistance:
 
         self.distance_matrix = pd.DataFrame(distance_matrix, index=self.coords_df_1.index, columns=self.coords_df_2.index)
 
+        self.distance_matrix = self.distance_matrix * self.mpp
+
         return self.distance_matrix
 
     def set_microns_per_pixel(self, adata: ad.AnnData, library_id: Optional[str] = None, override_mpp: Optional[float] = None):
@@ -89,7 +91,6 @@ class CloudDistance:
         vectorized_cloud_distance_function = np.vectorize(self.__cloud_distance_function, signature='(n)->()')
         cloud_distances = vectorized_cloud_distance_function(self.distance_matrix.values)
 
-        cloud_distances = cloud_distances * self.mpp
 
         return cloud_distances
 
